@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { index, show, store, update, destroy } from "../controller/main.controller.js";
+import * as controller from "../controllers/main.controller.js";
+import { authJwt } from "../middlewares/index.js";
 
 const router = Router();
 
-router.get('/main', index);
-router.get('/main/:id', show);
-router.post('/main', store);
-router.patch('/main/:id', update);
-router.delete('/main/:id', destroy);
+router.get('/', [authJwt.verifyToken, authJwt.isAdmin], controller.index);
+router.get('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.show);
+router.post('/', [authJwt.verifyToken, authJwt.isAdmin], controller.store);
+router.put('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.update);
+router.delete('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.destroy);
 
 export default router;
